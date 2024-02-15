@@ -1,0 +1,82 @@
+client
+server
+Request/Response
+
+client-server architecture
+
+Servlets
+    receive network request and response object (typically http)
+    servlet lives inside the server/servlet container
+
+Tomcat - give as webserver and servlet container
+    installation needed or use docker
+
+    localhost - tells our browser to go to the server on the computer we’re currently on.
+
+    Tomcat Folders
+        bin/ - Usefull Tomcat scripts and files. Includes the startup and shutdown scripts used to start and stop Tomcat.
+        
+        conf/ - Configuration (.xml) files for the Tomcat server like server.xml which can be used to modify the port Tomcat deploys to.
+
+        lib/ - JAR files (like servlet-api.jar) required by Tomcat to run.
+
+        logs/ - Tomcat-generated log files are kept here
+
+        webapps/ - Deployed applications are kept here. We can place our project directory here or convert it into a .war, which Tomcat will unzip.
+
+Java makes creating a servlet easy by providing the GenericServlet and HttpServlet classes which we can extend to create a custom servlet.
+
+public class HomeServlet extends HttpServlet {
+  private static final long serialVersionUID = 100L;  // Used for serialization since `HttpServlet` implements `Serializable`. 
+}
+
+public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  PrintWriter out = response.getWriter();
+  out.println("<html>");
+  out.println("<head><title>My Icecream Shop!</title></head>");
+  out.println("<body>");
+  out.println("<h1>Welcome To My Ice Cream Parlor</h1>");
+  out.println("</body></html>");
+}
+
+Web.xml
+    make the servlet visible to the server
+
+<servlet>
+    <servlet-name>homeServlet</servlet-name>
+    <servlet-class>HomeServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>homeServlet</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+
+Servlet Architecture and lifeCycle
+    CGI (common gateway interface)
+    servlet container
+
+servlet lifecycle
+init(), service(), destroy(),
+
+service()
+    doGet()
+    doPost()
+    doDelte()...
+
+doGet() - servlet response to the get request
+
+HTTP methods
+    GET -  get data from server
+    POST - create resource on server
+    PUT - update resource on server
+    DELETE - delete resource
+
+HTTP response
+    200 - Successful request.
+    201 - Successful request, and a resource was created.
+    400 - Bad request; the client sent a request that has some error.
+    401 - Unauthorized; the client has not been authenticated.
+    403 - Forbidden; the client does not have the correct access rights.
+    404 - Not found; the client cannot find the requested resource.
+    500 - Internal server error because there was an error on the server side that could not be handled.

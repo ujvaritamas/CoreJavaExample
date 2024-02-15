@@ -1,0 +1,9 @@
+JNI-Java Native Interface
+    Firstly, when creating a method that is meant to be used by JNI, you will need to use the keyword native when declaring the method. Take a look at the following example:
+    private native void totalSum();
+
+    System.loadLibrary(). This method call is used on the Java side, usually within the main method, to load the dynamic library that holds the native code
+
+    To implement a native method in native code, we must compile our Java program, and generate a .h file. To do this, you will run the following command in your compiler:
+
+javac -h . FindSum.java 

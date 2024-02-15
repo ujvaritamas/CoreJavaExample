@@ -1,0 +1,52 @@
+client server architecture
+
+TCP
+    Transmission Control Protocol
+    TCP is a communication protocol that enables applications to exchange messages over a network and ensure the successful delivery of exchanged data packets. Due to its reliability, TCP is the favored protocol for many types of common applications.
+    
+    request connection->
+    <-confirm connection
+    request data->
+    <-send data
+
+    end point - IP+port
+
+//create server socket
+ServerSocket firstServerSocket = new ServerSocket(6868);
+Socket socketConnection = firstServerSocket.accept()
+
+//catch connection
+DataInputStream dataStreamIn = new DataInputStream(socketConnection.getInputStream());
+
+String readString = (String)dataStreamIn.readUTF();
+
+firstServerSocket.close();
+
+server code:
+import java.io.*;
+import java.net.*;
+
+public class FirstServer {
+  public static void main(String[] args) {
+    try { 
+      ServerSocket firstServerSocket = new ServerSocket(6868);
+      Socket socketConnection = firstServerSocket.accept();//establishes connection 
+
+      DataInputStream dataStreamIn = new DataInputStream(socketConnection.getInputStream());
+
+      String readString = (String)dataStreamIn.readUTF();
+      System.out.println("message = " + readString);
+
+      firstServerSocket.close();
+
+    } catch(Exception e){System.out.println(e);}
+  }
+}
+
+client side
+Socket clientSocket = new Socket("localhost",6868);
+DataOutputStream dataStreamOut = new DataOutputStream(clientSocket.getOutputStream());
+dataStreamOut.writeUTF("Happy Coding!");
+dataStreamOut.flush();
+dataStreamOut.close();
+clientSocket.close();

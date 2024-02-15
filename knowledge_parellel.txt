@@ -1,0 +1,100 @@
+Parallel advanced
+    
+    concurrent programming
+        one cpu switching between tasks
+        Concurrency is the act of processing more than one task at seemingly the same time on the same CPU, requiring the ability to switch between tasks.
+
+    paralellel
+        multiple cpu
+        Parallelism is the act of splitting tasks into smaller subtasks and processing those subtasks in parallel, for instance across multiple CPUs at the exact same time.
+
+
+Thread creaton
+    Extending the Thread class
+        override the built-in .run()
+    Implementing the Runnable interface
+        override .run()
+        Thread t = new Thread(<Runable>)
+        t.start()
+
+    .start(), .sleep()
+
+Interacting with threads
+    .sleep() - pause the thread (time is parameter)
+    .wait() - pause untill condition is met
+    .isAlive()
+    .join() - wait for the thread to finish, (join back to the main thread)
+    .notifyAll() - unpause the waiting thread
+
+Shared resource
+    syncronized - given instance of the object can be accessed only by one thread
+
+    syncronized(this) - entire class is syncronized
+
+    public syncronized void method(n){}
+
+    private final Object lock = new Object();
+
+    syncronized(lock){}
+
+
+JVM
+    main thread started
+    Other started threads will run concurrently
+
+Thread pools
+    create thread and add to to the pool (Blocking queue)
+    No need for worrying about how many threads to create for the task. No need to create any threads as it goes. No need to assign each thread what they’ll be working on.
+
+    A thread pool manages a pool of worker threads that connect to a work queue of Runnable tasks waiting to be executed.
+
+    Default thread pool
+        Executor (Executor framework)
+            Implementing thread pooling throught Executor interface
+            Executor: launch a Runnable object task
+            ExecutorService: manages the lifecycle of tasks in a sub-interface of Executor
+            ScheduledExecutor: schedules the execution of tasks in a sub-interface of ExecutorService
+
+            relevant packages:
+            import java.util.concurrent.ExecutorService;
+            import java.util.concurrent.Executors;
+
+        creation:
+            private static final int N = 10;
+            ExecutorService executor = Executors.newFixedThreadPool(N);
+
+            Runnable task = new RunnableTask(); //this should implement Runnable interface
+            executor.execute(task);
+
+
+            executor.shutdown()     //cant add new thread, clear the queue, but thread still running
+            executor.awaitTermination()     //wait to finish everything in the queue
+
+Fork Join framework
+    ForkJoinPool - distributes a task across several worker threads and waits for a result.
+    need to extend either RecursiveAction or RecursiveTask
+        RecursiveAction: does not return any result
+        RecursiveTask: returns a result
+    invoke() - add task to the queue
+        pool.invoke(task)
+
+Collections are not thread-safe, which include Lists, Maps, and Sets.
+Multiple threads can’t manipulate a collection without introducing thread interference or memory consistency errors.
+
+Java Streams
+    Additionally, streams don’t change the original data structure and only return results based on pipelined methods.
+
+    Operations:
+        map(): returns a stream consisting of the results after applying a given function to the elements of this stream
+            List<Integer> numbers = Arrays.asList(1,2,3,4);
+            List square = numbers.stream().map(x->x*x).collect(Collectors.toList());
+        filter(): selects elements as per a Predicate passed as an argument
+            List names = Arrays.asList(“Alpha”,”Beta”,”Omega”);
+            List find = names.stream().filter(s->s.startsWith(“O”)).collect(Collectors.toList());
+        sorted(): sorts the stream
+            List names = Arrays.asList(“Omega”,”Alpha”,”Beta”);
+            List sorted = names.stream().sorted().collect(Collectors.toList());
+    Terminal Operations
+       collect(): returns the result of the intermediate operations performed on the stream
+       forEach(): iterates through every element of the stream
+       reduce():

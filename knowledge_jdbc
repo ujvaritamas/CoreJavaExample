@@ -1,0 +1,88 @@
+Java Database Connectivity
+    API
+    DDL - data definition language (create modify delete the primary structure [table, datashema])
+    DML - data manipulation language (insert edit delete and select data from the table)
+
+    App  - [JDBC API, JDBC MAnager (in the JVM)] - JDBC Drivers (Thirdparty ) - DB
+
+
+SQL
+CREATE TABLE CHAIRS (
+    CHAIR_ID INTEGER PRIMARY KEY,
+    CHAIR_NAME STRING NOT NULL,
+    CHAIR_COLOR STRING,
+    CHAIR_WEIGHT REAL NOT NULL,
+    CHAIR_QTY INTEGER NOT NULL
+);
+
+INSERT INTO CHAIRS (CHAIR_ID, CHAIR_NAME, CHAIR_COLOR, CHAIR_WEIGHT, CHAIR_QTY)
+VALUES 
+    (10001, "Camp Chair", "Blue", 3.7, 4);
+
+UPDATE CHAIRS
+    SET CHAIR_QTY = 0;
+
+UPDATE CHAIRS
+    SET CHAIR_COLOR = "RED"
+    WHERE CHAIR_ID = 10001;
+
+DELETE FROM CHAIRS
+    WHERE CHAIR_ID = 10001;
+
+SELECT * FROM CHAIRS;
+
+
+DriverManager, provides the methods to establish the database Connection object
+Connection, manages the connection and creates Statement objects
+Statement, executes the DDL and DML statements on the database
+ResultSet, a Java object that represents the results of a query
+SQLExeception, provides error handling when interacting with the database
+
+
+Persistence, or the ability of your data to live outside your application, is a crucial part of software development, especially as your programs grow in size and number of users.
+
+
+Jdbc driver
+    JDBC drivers are typically maintained in a repository service like Maven.
+
+
+public class ConnectionTest {
+
+public static void main(String[] args) {
+  try{
+    Class driver = Class.forName("org.sqlite.JDBC");
+    System.out.println("The driver was successfully loaded.");
+  } catch(ClassNotFoundException e){
+    System.out.println("The driver class was not found in the program files at runtime.");
+    e.printStackTrace();
+    System.exit(1);
+  }
+  
+  }
+  
+}
+
+
+Design principles
+    MVVM
+    Model-View-ViewModel
+    Essentially we are going to organize all of our objects (called models) into one package, our views (the user interface) into another package, and the ViewModels (the business logic that interacts with models, UI, and services) into another. We will also have a separate package for our data access classes, called services, where our data access object (the class that accesses the database) lives.
+
+    project
+        models - holds object representations
+        view - hold user interface files
+        viewmodels - holds business logic
+        services - provide the viewmodel with a mode of communcationg with external resources
+
+
+javac $(find . -name '*.java')
+java -classpath .:../sqlite-jdbc-3.36.0.3.jar viewmodels.BusinessLogic
+
+
+try (put resources you want to open here) {
+  // Do something with the resources here
+} catch (exceptions here) {
+  // Do something when the try block fails, typically alert the user
+}
+
+JDBC provides a very straightforward class to take care of executing static SQL queries, the Statement interface. A Statement is generated from a call to the Connection method, .createStatement().
